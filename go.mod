@@ -2,8 +2,6 @@ module github.com/thinkgos/gin-contrib
 
 go 1.22
 
-replace github.com/thinkgos/logger v1.0.0-rc1 => ../../../thinkgos/logger
-
 require (
 	github.com/alicebob/miniredis/v2 v2.34.0
 	github.com/casbin/casbin/v2 v2.105.0
@@ -16,7 +14,7 @@ require (
 	github.com/thinkgos/http-signature-go v0.3.1
 	github.com/thinkgos/httpcurl v0.1.1
 	github.com/thinkgos/limiter v0.2.0
-	github.com/thinkgos/logger v1.0.0-rc1
+	github.com/thinkgos/logger v1.0.0
 	golang.org/x/sync v0.11.0
 	gorm.io/gorm v1.26.1
 )

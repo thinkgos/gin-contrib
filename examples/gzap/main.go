@@ -21,14 +21,13 @@ func main() {
 	//   - Logs to stdout.
 	//   - RFC3339 with UTC time format.
 	r.Use(gzap.Logger(
-		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}),
+		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}).
+			SetNewCallerCore(logger.NewCallerCore()),
 		gzap.WithCustomFields(
 			func(c *gin.Context) logger.Field { return logger.String("custom field1", c.ClientIP()) },
 			func(c *gin.Context) logger.Field { return logger.String("custom field2", c.ClientIP()) },
 		),
-		gzap.WithSkipLogging(func(c *gin.Context) bool {
-			return c.Request.URL.Path == "/skiplogging"
-		}),
+		gzap.WithSkipLogging(func(c *gin.Context) bool { return c.Request.URL.Path == "/skiplogging" }),
 		gzap.WithEnableBody(true),
 	))
 

@@ -166,6 +166,7 @@ func newConfig() Config {
 // Requests with errors are logged using logger.Error().
 // Requests without errors are logged using logger.Info().
 func Logger(log *logger.Log, opts ...Option) gin.HandlerFunc {
+	log.AddCallerSkipPackage("github.com/thinkgos/gin-contrib")
 	cfg := newConfig()
 	for _, opt := range opts {
 		opt(&cfg)
@@ -265,11 +266,6 @@ func Recovery(log *logger.Log, stack bool, opts ...Option) gin.HandlerFunc {
 	for _, opt := range opts {
 		opt(&cfg)
 	}
-	if stack {
-		cfg.customFields = append(cfg.customFields, func(c *gin.Context) logger.Field {
-			return logger.ByteString("stack", debug.Stack())
-		})
-	}
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -302,6 +298,9 @@ func Recovery(log *logger.Log, stack bool, opts ...Option) gin.HandlerFunc {
 					Configure(func(e *logger.Event) {
 						for _, fieldFunc := range cfg.customFields {
 							e.With(fieldFunc(c))
+						}
+						if stack {
+							e.ByteString("stack", debug.Stack())
 						}
 					}).
 					Msg("recovery from panic")

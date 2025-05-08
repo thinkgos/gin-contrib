@@ -25,7 +25,8 @@ func main() {
 					return logger.String("requestId", vv)
 				}
 				return logger.Skip()
-			})),
+			})).
+			SetNewCallerCore(logger.NewCallerCore()),
 		gormzap.WithConfig(gormlogger.Config{
 			SlowThreshold:             200 * time.Millisecond,
 			Colorful:                  false,
