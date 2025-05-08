@@ -8,7 +8,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/require"
 
-	"github.com/things-go/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist"
 )
 
 // Test typical cache interactions

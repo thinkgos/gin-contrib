@@ -1,4 +1,4 @@
-module github.com/things-go/gin-contrib
+module github.com/thinkgos/gin-contrib
 
 go 1.22
 

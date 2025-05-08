@@ -7,7 +7,7 @@ import (
 	"github.com/patrickmn/go-cache"
 	"github.com/stretchr/testify/require"
 
-	"github.com/things-go/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist"
 )
 
 type cacheFactory func(*testing.T, time.Duration) persist.Store

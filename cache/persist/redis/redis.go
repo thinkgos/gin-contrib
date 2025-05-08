@@ -6,7 +6,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/things-go/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist"
 )
 
 // Store redis store

@@ -19,9 +19,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/things-go/gin-contrib/cache/persist"
-	"github.com/things-go/gin-contrib/cache/persist/memory"
-	redisStore "github.com/things-go/gin-contrib/cache/persist/redis"
+	"github.com/thinkgos/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist/memory"
+	redisStore "github.com/thinkgos/gin-contrib/cache/persist/redis"
 )
 
 var longLengthThan200Key = "/" + strings.Repeat("qwertyuiopasdfghjklzxcvbnm", 8)

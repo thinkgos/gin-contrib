@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"github.com/things-go/gin-contrib/gormzap"
+	"github.com/thinkgos/gin-contrib/gormzap"
 )
 
 func main() {

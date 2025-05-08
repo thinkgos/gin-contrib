@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/things-go/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist"
 )
 
 // PageCachePrefix default page cache key prefix

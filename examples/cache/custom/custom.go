@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	inmemory "github.com/patrickmn/go-cache"
 
-	"github.com/things-go/gin-contrib/cache"
-	"github.com/things-go/gin-contrib/cache/persist/memory"
+	"github.com/thinkgos/gin-contrib/cache"
+	"github.com/thinkgos/gin-contrib/cache/persist/memory"
 )
 
 func main() {

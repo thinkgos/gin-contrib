@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/things-go/gin-contrib/signature"
+	"github.com/thinkgos/gin-contrib/signature"
 	httpsign "github.com/thinkgos/http-signature-go"
 )
 

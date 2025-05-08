@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/things-go/gin-contrib/traceid"
+	"github.com/thinkgos/gin-contrib/traceid"
 )
 
 func main() {

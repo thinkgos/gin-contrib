@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
-	"github.com/things-go/gin-contrib/gzap"
+	"github.com/thinkgos/gin-contrib/gzap"
 )
 
 func main() {

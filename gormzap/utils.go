@@ -11,7 +11,7 @@ import (
 
 var (
 	gormPackage    = "gorm.io/gorm"
-	gormzapPackage = "github.com/things-go/gin-contrib/gormzap"
+	gormzapPackage = "github.com/thinkgos/gin-contrib/gormzap"
 )
 
 type CallerCore struct {

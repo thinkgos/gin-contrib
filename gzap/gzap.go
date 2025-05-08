@@ -21,7 +21,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/things-go/gin-contrib/internal/pool"
+	"github.com/thinkgos/gin-contrib/internal/pool"
 )
 
 // Option logger/recover option

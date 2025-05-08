@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/things-go/gin-contrib/nocache"
+	"github.com/thinkgos/gin-contrib/nocache"
 )
 
 func main() {

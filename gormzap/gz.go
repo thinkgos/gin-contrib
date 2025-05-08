@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"github.com/things-go/gin-contrib/internal/pool"
+	"github.com/thinkgos/gin-contrib/internal/pool"
 )
 
 // Logger logger for gorm2

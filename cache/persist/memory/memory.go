@@ -6,7 +6,7 @@ import (
 
 	"github.com/patrickmn/go-cache"
 
-	"github.com/things-go/gin-contrib/cache/persist"
+	"github.com/thinkgos/gin-contrib/cache/persist"
 )
 
 // Store memory store

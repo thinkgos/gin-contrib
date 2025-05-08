@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/things-go/gin-contrib/cache"
-	redisStore "github.com/things-go/gin-contrib/cache/persist/redis"
+	"github.com/thinkgos/gin-contrib/cache"
+	redisStore "github.com/thinkgos/gin-contrib/cache/persist/redis"
 )
 
 func main() {
