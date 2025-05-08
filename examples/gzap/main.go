@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"github.com/thinkgos/logger"
 
 	"github.com/thinkgos/gin-contrib/gzap"
 )
@@ -14,17 +14,17 @@ import (
 func main() {
 	r := gin.New()
 
-	logger, _ := zap.NewProduction()
+	l := logger.NewLogger()
 
 	// Add a ginzap middleware, which:
 	//   - Logs all requests, like a combined access and error log.
 	//   - Logs to stdout.
 	//   - RFC3339 with UTC time format.
-	r.Use(gzap.Logger(logger,
+	r.Use(gzap.Logger(
+		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}),
 		gzap.WithCustomFields(
-			gzap.String("app", "example"),
-			func(c *gin.Context) zap.Field { return zap.String("custom field1", c.ClientIP()) },
-			func(c *gin.Context) zap.Field { return zap.String("custom field2", c.ClientIP()) },
+			func(c *gin.Context) logger.Field { return logger.String("custom field1", c.ClientIP()) },
+			func(c *gin.Context) logger.Field { return logger.String("custom field2", c.ClientIP()) },
 		),
 		gzap.WithSkipLogging(func(c *gin.Context) bool {
 			return c.Request.URL.Path == "/skiplogging"
@@ -34,11 +34,12 @@ func main() {
 
 	// Logs all panic to error log
 	//   - stack means whether output the stack info.
-	r.Use(gzap.Recovery(logger, true,
+	r.Use(gzap.Recovery(
+		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}),
+		true,
 		gzap.WithCustomFields(
-			gzap.Any("app", "example"),
-			func(c *gin.Context) zap.Field { return zap.String("custom field1", c.ClientIP()) },
-			func(c *gin.Context) zap.Field { return zap.String("custom field2", c.ClientIP()) },
+			func(c *gin.Context) logger.Field { return logger.String("custom field1", c.ClientIP()) },
+			func(c *gin.Context) logger.Field { return logger.String("custom field2", c.ClientIP()) },
 		),
 	))
 

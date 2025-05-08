@@ -2,6 +2,8 @@ module github.com/thinkgos/gin-contrib
 
 go 1.22
 
+replace github.com/thinkgos/logger v1.0.0-rc1 => ../../../thinkgos/logger
+
 require (
 	github.com/alicebob/miniredis/v2 v2.34.0
 	github.com/casbin/casbin/v2 v2.105.0
@@ -14,7 +16,7 @@ require (
 	github.com/thinkgos/http-signature-go v0.3.1
 	github.com/thinkgos/httpcurl v0.1.1
 	github.com/thinkgos/limiter v0.2.0
-	go.uber.org/zap v1.27.0
+	github.com/thinkgos/logger v1.0.0-rc1
 	golang.org/x/sync v0.11.0
 	gorm.io/gorm v1.26.1
 )
@@ -51,12 +53,14 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.10.0 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 

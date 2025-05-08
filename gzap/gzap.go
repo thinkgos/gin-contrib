@@ -18,17 +18,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/thinkgos/httpcurl"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-
-	"github.com/thinkgos/gin-contrib/internal/pool"
+	"github.com/thinkgos/logger"
 )
 
 // Option logger/recover option
 type Option func(c *Config)
 
 // WithCustomFields optional custom field
-func WithCustomFields(fields ...func(c *gin.Context) zap.Field) Option {
+func WithCustomFields(fields ...func(c *gin.Context) logger.Field) Option {
 	return func(c *Config) {
 		c.customFields = fields
 	}
@@ -86,20 +83,10 @@ func WithSkipResponseBody(f func(c *gin.Context) bool) Option {
 }
 
 // WithUseLoggerLevel optional use logging level.
-func WithUseLoggerLevel(f func(c *gin.Context) zapcore.Level) Option {
+func WithUseLoggerLevel(f func(c *gin.Context) logger.Level) Option {
 	return func(c *Config) {
 		if f != nil {
 			c.useLoggerLevel = f
-		}
-	}
-}
-
-// WithFieldName optionally renames a log field.
-// Example: `WithFieldName(gzap.FieldStatus, "httpStatusCode")`
-func WithFieldName(index int, name string) Option {
-	return func(c *Config) {
-		if index > 0 && index < fieldMaxLen && name != "" {
-			c.field[index] = name
 		}
 	}
 }
@@ -114,24 +101,9 @@ func WithEnableDebugCurl(b bool) Option {
 	}
 }
 
-// Indices for renaming field.
-const (
-	FieldStatus = iota
-	FieldMethod
-	FieldPath
-	FieldRoute
-	FieldQuery
-	FieldIP
-	FieldUserAgent
-	FieldLatency
-	FieldRequestBody
-	FieldResponseBody
-	fieldMaxLen
-)
-
 // Config logger/recover config
 type Config struct {
-	customFields []func(c *gin.Context) zap.Field
+	customFields []func(c *gin.Context) logger.Field
 	// if returns true, it will skip logging.
 	skipLogging func(c *gin.Context) bool
 	// if returns true, it will skip request body.
@@ -140,14 +112,13 @@ type Config struct {
 	skipResponseBody func(c *gin.Context) bool
 	// use logger level,
 	// default:
-	// 	zap.ErrorLevel: when status >= http.StatusInternalServerError && status <= http.StatusNetworkAuthenticationRequired
-	// 	zap.WarnLevel: when status >= http.StatusBadRequest && status <= http.StatusUnavailableForLegalReasons
-	//  zap.InfoLevel: otherwise.
-	useLoggerLevel func(c *gin.Context) zapcore.Level
-	enableBody     *atomic.Bool        // enable request/response body
-	limit          int                 // <=0: mean not limit
-	field          [fieldMaxLen]string // log field names
-	debugCurl      *httpcurl.HttpCurl  // debug curl
+	// 	logger.ErrorLevel: when status >= http.StatusInternalServerError && status <= http.StatusNetworkAuthenticationRequired
+	// 	logger.WarnLevel: when status >= http.StatusBadRequest && status <= http.StatusUnavailableForLegalReasons
+	//  logger.InfoLevel: otherwise.
+	useLoggerLevel func(c *gin.Context) logger.Level
+	enableBody     *atomic.Bool       // enable request/response body
+	limit          int                // <=0: mean not limit
+	debugCurl      *httpcurl.HttpCurl // debug curl
 }
 
 func skipRequestBody(c *gin.Context) bool {
@@ -165,49 +136,36 @@ func skipResponseBody(c *gin.Context) bool {
 	return false
 }
 
-func useLoggerLevel(c *gin.Context) zapcore.Level {
+func useLoggerLevel(c *gin.Context) logger.Level {
 	status := c.Writer.Status()
 	if status >= http.StatusInternalServerError &&
 		status <= http.StatusNetworkAuthenticationRequired {
-		return zap.ErrorLevel
+		return logger.ErrorLevel
 	}
 	if status >= http.StatusBadRequest &&
 		status <= http.StatusUnavailableForLegalReasons &&
 		status != http.StatusUnauthorized {
-		return zap.WarnLevel
+		return logger.WarnLevel
 	}
-	return zap.InfoLevel
+	return logger.InfoLevel
 }
 
 func newConfig() Config {
 	return Config{
-		customFields:     nil,
 		skipLogging:      func(c *gin.Context) bool { return false },
 		skipRequestBody:  func(c *gin.Context) bool { return false },
 		skipResponseBody: func(c *gin.Context) bool { return false },
 		useLoggerLevel:   useLoggerLevel,
 		enableBody:       &atomic.Bool{},
 		limit:            0,
-		field: [fieldMaxLen]string{
-			"status",
-			"method",
-			"path",
-			"route",
-			"query",
-			"ip",
-			"user-agent",
-			"latency",
-			"requestBody",
-			"responseBody",
-		},
 	}
 }
 
-// Logger returns a gin.HandlerFunc (middleware) that logs requests using uber-go/zap.
+// Logger returns a gin.HandlerFunc (middleware) that logs requests using uber-go/logger.
 //
-// Requests with errors are logged using zap.Error().
-// Requests without errors are logged using zap.Info().
-func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
+// Requests with errors are logged using logger.Error().
+// Requests without errors are logged using logger.Info().
+func Logger(log *logger.Log, opts ...Option) gin.HandlerFunc {
 	cfg := newConfig()
 	for _, opt := range opts {
 		opt(&cfg)
@@ -249,52 +207,48 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 			if cfg.skipLogging(c) {
 				return
 			}
-			var level zapcore.Level
+			var level logger.Level
 
 			if len(c.Errors) > 0 {
-				level = zapcore.ErrorLevel
+				level = logger.ErrorLevel
 			} else {
 				level = cfg.useLoggerLevel(c)
 			}
-
-			fc := pool.Get()
-			defer pool.Put(fc)
-			fc.Fields = append(fc.Fields,
-				zap.Int(cfg.field[FieldStatus], c.Writer.Status()),
-				zap.String(cfg.field[FieldMethod], c.Request.Method),
-				zap.String(cfg.field[FieldPath], path),
-				zap.String(cfg.field[FieldRoute], c.FullPath()),
-				zap.String(cfg.field[FieldQuery], query),
-				zap.String(cfg.field[FieldIP], c.ClientIP()),
-				zap.String(cfg.field[FieldUserAgent], c.Request.UserAgent()),
-				zap.Duration(cfg.field[FieldLatency], time.Since(start)),
-			)
-			if cfg.enableBody.Load() {
-				respBody := "skip response body"
-				if hasSkipResponseBody := skipResponseBody(c) || cfg.skipResponseBody(c); !hasSkipResponseBody {
-					if cfg.limit > 0 && respBodyBuilder.Len() >= cfg.limit {
-						respBody = "larger response body"
-					} else {
-						respBody = respBodyBuilder.String()
+			log.OnLevelContext(c.Request.Context(), level).
+				Int("status", c.Writer.Status()).
+				String("method", c.Request.Method).
+				String("path", path).
+				String("route", c.FullPath()).
+				String("query", query).
+				String("ip", c.ClientIP()).
+				String("user-agent", c.Request.UserAgent()).
+				Duration("latency", time.Since(start)).
+				Configure(func(e *logger.Event) {
+					if cfg.enableBody.Load() {
+						respBody := "skip response body"
+						if hasSkipResponseBody := skipResponseBody(c) || cfg.skipResponseBody(c); !hasSkipResponseBody {
+							if cfg.limit > 0 && respBodyBuilder.Len() >= cfg.limit {
+								respBody = "larger response body"
+							} else {
+								respBody = respBodyBuilder.String()
+							}
+						}
+						e.String("requestBody", reqBody).
+							String("responseBody", respBody)
 					}
-				}
-				fc.Fields = append(fc.Fields,
-					zap.String(cfg.field[FieldRequestBody], reqBody),
-					zap.String(cfg.field[FieldResponseBody], respBody),
-				)
-			}
-			for _, fieldFunc := range cfg.customFields {
-				fc.Fields = append(fc.Fields, fieldFunc(c))
-			}
-			if debugCurl != "" {
-				fc.Fields = append(fc.Fields, zap.String("curl", debugCurl))
-			}
-			if len(c.Errors) > 0 {
-				for _, e := range c.Errors {
-					fc.Fields = append(fc.Fields, zap.Error(e))
-				}
-			}
-			logger.Log(level, "logging", fc.Fields...)
+					for _, fieldFunc := range cfg.customFields {
+						e.With(fieldFunc(c))
+					}
+					if debugCurl != "" {
+						e.String("curl", debugCurl)
+					}
+					if len(c.Errors) > 0 {
+						for _, err := range c.Errors {
+							e.Error(err)
+						}
+					}
+				}).
+				Msg("logging")
 		}()
 
 		c.Next()
@@ -302,18 +256,18 @@ func Logger(logger *zap.Logger, opts ...Option) gin.HandlerFunc {
 }
 
 // Recovery returns a gin.HandlerFunc (middleware)
-// that recovers from any panics and logs requests using uber-go/zap.
-// All errors are logged using zap.Error().
+// that recovers from any panics and logs requests using uber-go/logger.
+// All errors are logged using logger.Error().
 // stack means whether output the stack info.
 // The stack info is easy to find where the error occurs but the stack info is too large.
-func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
+func Recovery(log *logger.Log, stack bool, opts ...Option) gin.HandlerFunc {
 	cfg := newConfig()
 	for _, opt := range opts {
 		opt(&cfg)
 	}
 	if stack {
-		cfg.customFields = append(cfg.customFields, func(c *gin.Context) zap.Field {
-			return zap.ByteString("stack", debug.Stack())
+		cfg.customFields = append(cfg.customFields, func(c *gin.Context) logger.Field {
+			return logger.ByteString("stack", debug.Stack())
 		})
 	}
 	return func(c *gin.Context) {
@@ -333,26 +287,24 @@ func Recovery(logger *zap.Logger, stack bool, opts ...Option) gin.HandlerFunc {
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					logger.Error(c.Request.URL.Path,
-						zap.Any("error", err),
-						zap.ByteString("request", httpRequest),
-					)
+					log.OnErrorContext(c.Request.Context()).
+						Any("error", err).
+						ByteString("request", httpRequest).
+						Msg(c.Request.URL.Path)
 					// If the connection is dead, we can't write a status to it.
 					_ = c.Error(err.(error))
 					c.Abort()
 					return
 				}
-
-				fc := pool.Get()
-				defer pool.Put(fc)
-				fc.Fields = append(fc.Fields,
-					zap.Any("error", err),
-					zap.ByteString("request", httpRequest),
-				)
-				for _, field := range cfg.customFields {
-					fc.Fields = append(fc.Fields, field(c))
-				}
-				logger.Error("recovery from panic", fc.Fields...)
+				log.OnErrorContext(c.Request.Context()).
+					Any("error", err).
+					ByteString("request", httpRequest).
+					Configure(func(e *logger.Event) {
+						for _, fieldFunc := range cfg.customFields {
+							e.With(fieldFunc(c))
+						}
+					}).
+					Msg("recovery from panic")
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()
@@ -376,31 +328,31 @@ func (w *bodyWriter) WriteString(s string) (int, error) {
 }
 
 // Any custom immutable any field
-func Any(key string, value any) func(c *gin.Context) zap.Field {
-	field := zap.Any(key, value)
-	return func(c *gin.Context) zap.Field { return field }
+func Any(key string, value any) func(c *gin.Context) logger.Field {
+	field := logger.Any(key, value)
+	return func(c *gin.Context) logger.Field { return field }
 }
 
 // String custom immutable string field
-func String(key, value string) func(c *gin.Context) zap.Field {
-	field := zap.String(key, value)
-	return func(c *gin.Context) zap.Field { return field }
+func String(key, value string) func(c *gin.Context) logger.Field {
+	field := logger.String(key, value)
+	return func(c *gin.Context) logger.Field { return field }
 }
 
 // Int64 custom immutable int64 field
-func Int64(key string, value int64) func(c *gin.Context) zap.Field {
-	field := zap.Int64(key, value)
-	return func(c *gin.Context) zap.Field { return field }
+func Int64(key string, value int64) func(c *gin.Context) logger.Field {
+	field := logger.Int64(key, value)
+	return func(c *gin.Context) logger.Field { return field }
 }
 
 // Uint64 custom immutable uint64 field
-func Uint64(key string, value uint64) func(c *gin.Context) zap.Field {
-	field := zap.Uint64(key, value)
-	return func(c *gin.Context) zap.Field { return field }
+func Uint64(key string, value uint64) func(c *gin.Context) logger.Field {
+	field := logger.Uint64(key, value)
+	return func(c *gin.Context) logger.Field { return field }
 }
 
 // Float64 custom immutable float32 field
-func Float64(key string, value float64) func(c *gin.Context) zap.Field {
-	field := zap.Float64(key, value)
-	return func(c *gin.Context) zap.Field { return field }
+func Float64(key string, value float64) func(c *gin.Context) logger.Field {
+	field := logger.Float64(key, value)
+	return func(c *gin.Context) logger.Field { return field }
 }

@@ -4,37 +4,33 @@ import (
 	"context"
 	"time"
 
-	"go.uber.org/zap"
+	"github.com/thinkgos/logger"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	gormlogger "gorm.io/gorm/logger"
 
 	"github.com/thinkgos/gin-contrib/gormzap"
 )
 
 func main() {
-	zapL, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
-	log := gormzap.New(zapL,
-		gormzap.WithCustomFields(
-			gormzap.String("service", "test"),
-			func(ctx context.Context) zap.Field {
+	l := logger.NewLogger()
+	log := gormzap.New(
+		l.WithNewHook(
+			&logger.ImmutableString{Key: "service", Value: "test"},
+			logger.HookFunc(func(ctx context.Context) logger.Field {
 				v := ctx.Value("requestId")
 				if v == nil {
-					return zap.Skip()
+					return logger.Skip()
 				}
 				if vv, ok := v.(string); ok {
-					return zap.String("requestId", vv)
+					return logger.String("requestId", vv)
 				}
-				return zap.Skip()
-			},
-		),
-		gormzap.WithConfig(logger.Config{
+				return logger.Skip()
+			})),
+		gormzap.WithConfig(gormlogger.Config{
 			SlowThreshold:             200 * time.Millisecond,
 			Colorful:                  false,
 			IgnoreRecordNotFoundError: false,
-			LogLevel:                  logger.Info,
+			LogLevel:                  gormlogger.Info,
 		}),
 	)
 	// your dialector
