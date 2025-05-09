@@ -1,6 +1,8 @@
 module github.com/thinkgos/gin-contrib
 
-go 1.22
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/alicebob/miniredis/v2 v2.34.0
@@ -15,7 +17,7 @@ require (
 	github.com/thinkgos/httpcurl v0.1.1
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.0
-	golang.org/x/sync v0.11.0
+	golang.org/x/sync v0.14.0
 	gorm.io/gorm v1.26.1
 )
 
