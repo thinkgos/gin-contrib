@@ -16,7 +16,7 @@ require (
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.0
 	golang.org/x/sync v0.11.0
-	gorm.io/gorm v1.26.1
+	gorm.io/gorm v1.30.0
 )
 
 require (
