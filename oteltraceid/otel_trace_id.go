@@ -61,7 +61,7 @@ func FromTraceId(ctx context.Context) string {
 }
 
 func FromSpanId(ctx context.Context) string {
-	if sc := trace.SpanContextFromContext(ctx); sc.HasTraceID() {
+	if sc := trace.SpanContextFromContext(ctx); sc.HasSpanID() {
 		return sc.SpanID().String()
 	}
 	return ""
