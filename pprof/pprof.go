@@ -36,5 +36,5 @@ func Router(g gin.IRouter, prefixOptions ...string) {
 		r.GET("/mutex", gin.WrapH(pprof.Handler("mutex")))
 		r.GET("/threadcreate", gin.WrapH(pprof.Handler("threadcreate")))
 	}
-	r.GET("/debug/vars", gin.WrapH(expvar.Handler()))
+	g.GET("/debug/vars", gin.WrapH(expvar.Handler()))
 }
