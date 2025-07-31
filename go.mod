@@ -14,7 +14,7 @@ require (
 	github.com/thinkgos/http-signature-go v0.3.1
 	github.com/thinkgos/httpcurl v0.1.1
 	github.com/thinkgos/limiter v0.2.0
-	github.com/thinkgos/logger v1.1.0
+	github.com/thinkgos/logger v1.1.1
 	go.opentelemetry.io/otel/trace v1.37.0
 	golang.org/x/sync v0.16.0
 	gorm.io/gorm v1.30.1

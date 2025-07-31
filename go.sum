@@ -96,8 +96,8 @@ github.com/thinkgos/httpcurl v0.1.1 h1:QhafMtst5PeLO1BigVzWv1IbbaHJsrrW9zD/zEIZf
 github.com/thinkgos/httpcurl v0.1.1/go.mod h1:6/oHRxFowU4lpWVkG0gTZhxsILTUosgzHTAUsUvhANM=
 github.com/thinkgos/limiter v0.2.0 h1:U0v9T2eUXIYcHmlrIehZ1Dj1vXjDPcIpUV1d4oC6orA=
 github.com/thinkgos/limiter v0.2.0/go.mod h1:ijvHq1IFh/xiilQ4H/ZaOQIDwxESaZ8msMexhEtdDCc=
-github.com/thinkgos/logger v1.1.0 h1:1AKJ2mAwlZqTOzSQJpd+g5wKkvOHRlNLEIZEPLYS7OU=
-github.com/thinkgos/logger v1.1.0/go.mod h1:kg0NRVm0mXalayuVqJCVVN9NDqMVLm3AHaYoLknAJE4=
+github.com/thinkgos/logger v1.1.1 h1:nAvvtO7PAF2r4/brSqECZ3aFZLIKWE+FkzJokbDQBhY=
+github.com/thinkgos/logger v1.1.1/go.mod h1:kg0NRVm0mXalayuVqJCVVN9NDqMVLm3AHaYoLknAJE4=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.14 h1:yOQvXCBc3Ij46LRkRoh4Yd5qK6LVOgi0bYOXfb7ifjw=
