@@ -12,7 +12,7 @@ require (
 	github.com/redis/go-redis/v9 v9.12.1
 	github.com/stretchr/testify v1.10.0
 	github.com/thinkgos/http-signature-go v0.3.1
-	github.com/thinkgos/httpcurl v0.1.1
+	github.com/thinkgos/httpcurl v0.1.2
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.1
 	go.opentelemetry.io/otel/trace v1.37.0
