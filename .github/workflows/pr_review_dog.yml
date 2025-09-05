@@ -5,6 +5,11 @@ on:
     paths-ignore:
       - "**.md"
 
+permissions:
+  contents: read
+  packages: read
+  issues: write
+
 jobs:
   golangci-lint:
     name: runner / golangci-lint
@@ -21,6 +26,6 @@ jobs:
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v8
-        with: 
+        with:
           args: -E misspell,whitespace,unconvert,noctx,musttag,errchkjson,errname,exhaustive,exptostd
           version: latest
