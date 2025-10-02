@@ -113,8 +113,8 @@ github.com/thinkgos/httpcurl v0.1.2 h1:tKh623+2PTtf2jB26EwyzEdMDzexjldmEeRWvks4l
 github.com/thinkgos/httpcurl v0.1.2/go.mod h1:6/oHRxFowU4lpWVkG0gTZhxsILTUosgzHTAUsUvhANM=
 github.com/thinkgos/limiter v0.2.0 h1:U0v9T2eUXIYcHmlrIehZ1Dj1vXjDPcIpUV1d4oC6orA=
 github.com/thinkgos/limiter v0.2.0/go.mod h1:ijvHq1IFh/xiilQ4H/ZaOQIDwxESaZ8msMexhEtdDCc=
-github.com/thinkgos/logger v1.1.1 h1:nAvvtO7PAF2r4/brSqECZ3aFZLIKWE+FkzJokbDQBhY=
-github.com/thinkgos/logger v1.1.1/go.mod h1:kg0NRVm0mXalayuVqJCVVN9NDqMVLm3AHaYoLknAJE4=
+github.com/thinkgos/logger v1.1.2 h1:dMJjIOQMhHskPLlj1/W6W5866mKz6l8u+d8T56j518w=
+github.com/thinkgos/logger v1.1.2/go.mod h1:kg0NRVm0mXalayuVqJCVVN9NDqMVLm3AHaYoLknAJE4=
 github.com/tklauser/go-sysconf v0.3.12 h1:0QaGUFOdQaIVdPgfITYzaTegZvdCjmYO52cSFAEVmqU=
 github.com/tklauser/go-sysconf v0.3.12/go.mod h1:Ho14jnntGE1fpdOqQEEaiKRpvIavV0hSfmBq8nJbHYI=
 github.com/tklauser/numcpus v0.6.1 h1:ng9scYS7az0Bk4OZLvrNXNSAO2Pxr1XXRAPyjhIx+Fk=
