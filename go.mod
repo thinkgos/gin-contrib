@@ -17,7 +17,7 @@ require (
 	github.com/thinkgos/logger v1.1.2
 	go.opentelemetry.io/otel/trace v1.38.0
 	golang.org/x/sync v0.17.0
-	gorm.io/gorm v1.31.0
+	gorm.io/gorm v1.31.1
 )
 
 require (
