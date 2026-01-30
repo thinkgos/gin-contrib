@@ -6,7 +6,7 @@ require (
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/casbin/casbin/v2 v2.135.0
 	github.com/gin-gonic/gin v1.11.0
-	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/redis/go-redis/v9 v9.17.3
