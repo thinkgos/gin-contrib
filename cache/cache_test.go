@@ -280,14 +280,14 @@ func TestCacheInSingleflight(t *testing.T) {
 
 	outp := make(chan string, 10)
 
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		go func() {
 			resp := performRequest("/singleflight", r)
 			outp <- resp.Body.String()
 		}()
 	}
 	time.Sleep(time.Millisecond * 500)
-	for i := 0; i < 5; i++ {
+	for range 5 {
 		go func() {
 			resp := performRequest("/singleflight", r)
 			outp <- resp.Body.String()
@@ -295,7 +295,7 @@ func TestCacheInSingleflight(t *testing.T) {
 	}
 	time.Sleep(time.Millisecond * 500)
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		v := <-outp
 		assert.Equal(t, "OK", v)
 	}

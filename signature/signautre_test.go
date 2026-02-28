@@ -188,15 +188,15 @@ func mockMergerHeader(p *httpsign.Parameter, r *http.Request) {
 		hd = httpsign.HeaderAuthorization
 		b.WriteString("Signature ")
 	}
-	b.WriteString(fmt.Sprintf(`keyId="%s",`, p.KeyId))
-	b.WriteString(fmt.Sprintf(`algorithm="%s",`, p.Algorithm))
+	fmt.Fprintf(&b, `keyId="%s",`, p.KeyId)
+	fmt.Fprintf(&b, `algorithm="%s",`, p.Algorithm)
 	if p.Created > 0 {
-		b.WriteString(fmt.Sprintf(`created=%d,`, p.Created))
+		fmt.Fprintf(&b, `created=%d,`, p.Created)
 	}
 	if p.Expires > 0 {
-		b.WriteString(fmt.Sprintf(`expires=%d,`, p.Expires))
+		fmt.Fprintf(&b, `expires=%d,`, p.Expires)
 	}
-	b.WriteString(fmt.Sprintf(`headers="%s",`, strings.Join(p.Headers, " ")))
-	b.WriteString(fmt.Sprintf(`signature="%s"`, p.Signature))
+	fmt.Fprintf(&b, `headers="%s",`, strings.Join(p.Headers, " "))
+	fmt.Fprintf(&b, `signature="%s"`, p.Signature)
 	r.Header.Set(hd, b.String())
 }
