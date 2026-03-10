@@ -99,7 +99,6 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, f func() (string, i
 				} else {
 					e.Int64("rows", rows)
 				}
-
 			}).
 			Str("sql", sql).
 			Msg("trace")
