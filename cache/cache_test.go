@@ -49,7 +49,7 @@ func init() {
 }
 
 func performRequest(target string, router *gin.Engine) *httptest.ResponseRecorder {
-	r := httptest.NewRequest(http.MethodGet, target, nil)
+	r := httptest.NewRequestWithContext(context.Background(), http.MethodGet, target, nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, r)
 	return w
