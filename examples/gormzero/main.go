@@ -12,9 +12,7 @@ import (
 )
 
 func main() {
-	l := log.Logger
-
-	lg := l.With().Str("service", "test").Logger().Hook(zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
+	l := log.Logger.With().Str("service", "test").Logger().Hook(zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
 		v := e.GetCtx().Value("requestId")
 		if v == nil {
 			return
@@ -24,7 +22,7 @@ func main() {
 		}
 	}))
 	log := gormzero.New(
-		new(lg),
+		new(l),
 		gormzero.WithConfig(gormlogger.Config{
 			SlowThreshold:             200 * time.Millisecond,
 			Colorful:                  false,

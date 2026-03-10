@@ -18,9 +18,7 @@ type ctxClientIp struct{}
 func main() {
 	r := gin.New()
 
-	l := log.Logger
-
-	lg := l.With().
+	lg := log.Logger.With().
 		Str("app", "example").
 		Logger().
 		Hook(zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
