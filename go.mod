@@ -16,7 +16,7 @@ require (
 	github.com/thinkgos/httpcurl v0.1.2
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.2
-	go.opentelemetry.io/otel/trace v1.41.0
+	go.opentelemetry.io/otel/trace v1.42.0
 	golang.org/x/sync v0.19.0
 	gorm.io/gorm v1.31.1
 )
@@ -56,7 +56,7 @@ require (
 	github.com/ugorji/go/codec v1.3.1 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.mongodb.org/mongo-driver/v2 v2.5.0 // indirect
-	go.opentelemetry.io/otel v1.41.0 // indirect
+	go.opentelemetry.io/otel v1.42.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
