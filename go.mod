@@ -17,7 +17,7 @@ require (
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.2
 	go.opentelemetry.io/otel/trace v1.42.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 	gorm.io/gorm v1.31.1
 )
 
