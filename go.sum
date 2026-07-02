@@ -107,8 +107,8 @@ github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/thinkgos/http-signature-go v0.3.1 h1:HuavLmPsTWjJPFs2gLB4JfZD5It9DA3+DoaYrO4RGAE=
-github.com/thinkgos/http-signature-go v0.3.1/go.mod h1:D2VFhdA0QhkMGOi+KpazU3pxDNHV1w2tcBRQ1Q+jzp0=
+github.com/thinkgos/http-signature-go v0.3.2 h1:m5WljSh1dF8TfqniOUaymrPzdjtj6vEwos2mKc6TIF4=
+github.com/thinkgos/http-signature-go v0.3.2/go.mod h1:oEJ8CRYmmq35nxl+8oe/aOtO8ZdiCKVAAJxdcKLbMKA=
 github.com/thinkgos/httpcurl v0.1.2 h1:tKh623+2PTtf2jB26EwyzEdMDzexjldmEeRWvks4lhc=
 github.com/thinkgos/httpcurl v0.1.2/go.mod h1:6/oHRxFowU4lpWVkG0gTZhxsILTUosgzHTAUsUvhANM=
 github.com/thinkgos/limiter v0.2.0 h1:U0v9T2eUXIYcHmlrIehZ1Dj1vXjDPcIpUV1d4oC6orA=

@@ -12,7 +12,7 @@ require (
 	github.com/redis/go-redis/v9 v9.21.0
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.11.1
-	github.com/thinkgos/http-signature-go v0.3.1
+	github.com/thinkgos/http-signature-go v0.3.2
 	github.com/thinkgos/httpcurl v0.1.2
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.1.2
