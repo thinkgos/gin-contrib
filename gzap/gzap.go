@@ -24,13 +24,6 @@ import (
 // Option logger/recover option
 type Option func(c *Config)
 
-// WithCustomFields optional custom field
-func WithCustomFields(fields ...func(c *gin.Context) logger.Field) Option {
-	return func(c *Config) {
-		c.customFields = fields
-	}
-}
-
 // WithSkipLogging optional custom skip logging option.
 func WithSkipLogging(f func(c *gin.Context) bool) Option {
 	return func(c *Config) {
@@ -103,7 +96,6 @@ func WithEnableDebugCurl(b bool) Option {
 
 // Config logger/recover config
 type Config struct {
-	customFields []func(c *gin.Context) logger.Field
 	// if returns true, it will skip logging.
 	skipLogging func(c *gin.Context) bool
 	// if returns true, it will skip request body.
@@ -224,7 +216,7 @@ func Logger(log *logger.Log, opts ...Option) gin.HandlerFunc {
 				String("ip", c.ClientIP()).
 				String("user-agent", c.Request.UserAgent()).
 				Duration("latency", time.Since(start)).
-				Configure(func(e *logger.Event) {
+				HookFunc(func(e *logger.Event) {
 					if cfg.enableBody.Load() {
 						respBody := "skip response body"
 						if hasSkipResponseBody := skipResponseBody(c) || cfg.skipResponseBody(c); !hasSkipResponseBody {
@@ -236,9 +228,6 @@ func Logger(log *logger.Log, opts ...Option) gin.HandlerFunc {
 						}
 						e.String("requestBody", reqBody).
 							String("responseBody", respBody)
-					}
-					for _, fieldFunc := range cfg.customFields {
-						e.With(fieldFunc(c))
 					}
 					if debugCurl != "" {
 						e.String("curl", debugCurl)
@@ -295,10 +284,7 @@ func Recovery(log *logger.Log, stack bool, opts ...Option) gin.HandlerFunc {
 				log.OnErrorContext(c.Request.Context()).
 					Any("error", err).
 					ByteString("request", httpRequest).
-					Configure(func(e *logger.Event) {
-						for _, fieldFunc := range cfg.customFields {
-							e.With(fieldFunc(c))
-						}
+					HookFunc(func(e *logger.Event) {
 						if stack {
 							e.ByteString("stack", debug.Stack())
 						}
@@ -324,34 +310,4 @@ func (w *bodyWriter) Write(b []byte) (int, error) {
 func (w *bodyWriter) WriteString(s string) (int, error) {
 	w.dupBody.WriteString(s)
 	return w.ResponseWriter.WriteString(s)
-}
-
-// Any custom immutable any field
-func Any(key string, value any) func(c *gin.Context) logger.Field {
-	field := logger.Any(key, value)
-	return func(c *gin.Context) logger.Field { return field }
-}
-
-// String custom immutable string field
-func String(key, value string) func(c *gin.Context) logger.Field {
-	field := logger.String(key, value)
-	return func(c *gin.Context) logger.Field { return field }
-}
-
-// Int64 custom immutable int64 field
-func Int64(key string, value int64) func(c *gin.Context) logger.Field {
-	field := logger.Int64(key, value)
-	return func(c *gin.Context) logger.Field { return field }
-}
-
-// Uint64 custom immutable uint64 field
-func Uint64(key string, value uint64) func(c *gin.Context) logger.Field {
-	field := logger.Uint64(key, value)
-	return func(c *gin.Context) logger.Field { return field }
-}
-
-// Float64 custom immutable float32 field
-func Float64(key string, value float64) func(c *gin.Context) logger.Field {
-	field := logger.Float64(key, value)
-	return func(c *gin.Context) logger.Field { return field }
 }

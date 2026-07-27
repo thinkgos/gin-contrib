@@ -1,32 +1,47 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/thinkgos/logger"
-
 	"github.com/thinkgos/gin-contrib/gzap"
+	"github.com/thinkgos/logger"
 )
+
+type ctxClientIp struct{}
+
+type CustomAppValue struct{}
+
+func (c CustomAppValue) RunHook(e *logger.Event) {
+	e.String("app", "example")
+}
+
+type CustomFields struct{}
+
+func (c CustomFields) RunHook(e *logger.Event) {
+	e.String("custom field1", e.Context().Value(ctxClientIp{}).(string)).
+		String("custom field2", e.Context().Value(ctxClientIp{}).(string))
+}
 
 func main() {
 	r := gin.New()
 
 	l := logger.NewLogger()
 
+	r.Use(func(c *gin.Context) {
+		c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), ctxClientIp{}, c.ClientIP()))
+	})
+
 	// Add a ginzap middleware, which:
 	//   - Logs all requests, like a combined access and error log.
 	//   - Logs to stdout.
 	//   - RFC3339 with UTC time format.
 	r.Use(gzap.Logger(
-		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}).
+		l.WithNewHook(&CustomAppValue{}, &CustomFields{}).
 			SetNewCallerCore(logger.NewCallerCore()),
-		gzap.WithCustomFields(
-			func(c *gin.Context) logger.Field { return logger.String("custom field1", c.ClientIP()) },
-			func(c *gin.Context) logger.Field { return logger.String("custom field2", c.ClientIP()) },
-		),
 		gzap.WithSkipLogging(func(c *gin.Context) bool { return c.Request.URL.Path == "/skiplogging" }),
 		gzap.WithEnableBody(true),
 	))
@@ -34,12 +49,8 @@ func main() {
 	// Logs all panic to error log
 	//   - stack means whether output the stack info.
 	r.Use(gzap.Recovery(
-		l.WithNewHook(&logger.ImmutableString{Key: "app", Value: "example"}),
+		l.WithNewHook(&CustomAppValue{}, &CustomFields{}),
 		true,
-		gzap.WithCustomFields(
-			func(c *gin.Context) logger.Field { return logger.String("custom field1", c.ClientIP()) },
-			func(c *gin.Context) logger.Field { return logger.String("custom field2", c.ClientIP()) },
-		),
 	))
 
 	// Example ping request.

@@ -97,11 +97,11 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, f func() (string, i
 		l.log.OnErrorContext(ctx).
 			Error(err).
 			Duration("latency", elapsed).
-			DoHookFunc(func(ctx context.Context) logger.Field {
+			HookFunc(func(e *logger.Event) {
 				if rows == -1 {
-					return logger.String("rows", "-")
+					e.String("rows", "-")
 				} else {
-					return logger.Int64("rows", rows)
+					e.Int64("rows", rows)
 				}
 			}).
 			String("sql", sql).
@@ -115,11 +115,11 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, f func() (string, i
 			Error(err).
 			String("slow!!!", fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)).
 			Duration("latency", elapsed).
-			DoHookFunc(func(ctx context.Context) logger.Field {
+			HookFunc(func(e *logger.Event) {
 				if rows == -1 {
-					return logger.String("rows", "-")
+					e.String("rows", "-")
 				} else {
-					return logger.Int64("rows", rows)
+					e.Int64("rows", rows)
 				}
 			}).
 			String("sql", sql).
@@ -129,11 +129,11 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, f func() (string, i
 		l.log.OnInfoContext(ctx).
 			Error(err).
 			Duration("latency", elapsed).
-			DoHookFunc(func(ctx context.Context) logger.Field {
+			HookFunc(func(e *logger.Event) {
 				if rows == -1 {
-					return logger.String("rows", "-")
+					logger.String("rows", "-")
 				} else {
-					return logger.Int64("rows", rows)
+					logger.Int64("rows", rows)
 				}
 			}).
 			String("sql", sql).

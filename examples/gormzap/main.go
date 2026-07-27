@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"time"
 
 	"github.com/thinkgos/logger"
@@ -11,20 +10,24 @@ import (
 	"github.com/thinkgos/gin-contrib/gormzap"
 )
 
+type CustomAppValue struct{}
+
+func (c CustomAppValue) RunHook(e *logger.Event) {
+	e.String("service", "test")
+}
+
 func main() {
 	l := logger.NewLogger()
 	log := gormzap.New(
 		l.WithNewHook(
-			&logger.ImmutableString{Key: "service", Value: "test"},
-			logger.HookFunc(func(ctx context.Context) logger.Field {
-				v := ctx.Value("requestId")
-				if v == nil {
-					return logger.Skip()
+			CustomAppValue{},
+			logger.HookFunc(func(e *logger.Event) {
+				v := e.Context().Value("requestId")
+				if v != nil {
+					if vv, ok := v.(string); ok {
+						logger.String("requestId", vv)
+					}
 				}
-				if vv, ok := v.(string); ok {
-					return logger.String("requestId", vv)
-				}
-				return logger.Skip()
 			})).
 			SetNewCallerCore(logger.NewCallerCore()),
 		gormzap.WithConfig(gormlogger.Config{
