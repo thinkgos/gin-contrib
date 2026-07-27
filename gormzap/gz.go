@@ -131,9 +131,9 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, f func() (string, i
 			Duration("latency", elapsed).
 			HookFunc(func(e *logger.Event) {
 				if rows == -1 {
-					logger.String("rows", "-")
+					e.String("rows", "-")
 				} else {
-					logger.Int64("rows", rows)
+					e.Int64("rows", rows)
 				}
 			}).
 			String("sql", sql).

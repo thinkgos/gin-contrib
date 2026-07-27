@@ -25,7 +25,7 @@ func main() {
 				v := e.Context().Value("requestId")
 				if v != nil {
 					if vv, ok := v.(string); ok {
-						logger.String("requestId", vv)
+						e.String("requestId", vv)
 					}
 				}
 			})).
