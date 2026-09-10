@@ -1,6 +1,6 @@
 module github.com/thinkgos/gin-contrib
 
-go 1.26
+go 1.26.0
 
 require (
 	github.com/alicebob/miniredis/v2 v2.39.0
@@ -16,7 +16,7 @@ require (
 	github.com/thinkgos/limiter v0.2.0
 	github.com/thinkgos/logger v1.2.1
 	go.opentelemetry.io/otel/trace v1.46.0
-	golang.org/x/sync v0.22.0
+	golang.org/x/sync v0.23.0
 	gorm.io/gorm v1.31.2
 )
 
